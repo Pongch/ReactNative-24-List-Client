@@ -1,5 +1,15 @@
 {
   "expo": {
-    "sdkVersion": "25.0.0"
+   "name": "24 List",
+   "icon": "./src/24listlogo.png",
+   "version": "1.0.0",
+   "slug": "24-list",
+   "sdkVersion": "25.0.0",
+   "ios": {
+     "bundleIdentifier": "com.pongch.24list"
+   },
+   "android": {
+     "package": "com.pongch.24list"
+   }
   }
 }

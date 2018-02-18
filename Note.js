@@ -7,6 +7,26 @@ import {
     Switch,
 } from 'react-native';
 
+const striked = {
+  paddingLeft: 60,
+  borderLeftWidth: 10,
+  borderLeftColor: '#E91E63'
+}
+
+const notStriked = {
+  paddingLeft: 60,
+  borderLeftWidth: 10,
+  borderLeftColor: '#E91E63',
+  textDecorationLine: 'line-through',
+  textDecorationStyle: 'solid'
+}
+
+const defaultStrike = {
+  paddingLeft: 60,
+  borderLeftWidth: 10,
+  borderLeftColor: '#E91E63'
+}
+
 
   export default class Note extends Component {
 
@@ -14,8 +34,10 @@ import {
       super(props);
       this.state = {
           noteToggle: false,
+          styleStrike: defaultStrike
       };
     }
+
 
     render() {
         return (
@@ -25,7 +47,7 @@ import {
                   onValueChange={(val) => this.toggleSwitch(val)}
                   style={styles.checkbox}
                 />
-                <Text style={styles.noteText}>{this.props.val.note}</Text>
+                <Text style={this.state.styleStrike}>{this.props.val.note}</Text>
 
                 <TouchableOpacity onPress={this.props.deleteMethod} style={styles.noteDelete}>
                     <Text style={styles.noteDeleteText}>X</Text>
@@ -35,8 +57,14 @@ import {
     }
 
     toggleSwitch(value){
-      this.setState({noteToggle : value})
+      this.setState({noteToggle : value});
+      if (value == true){
+        this.setState({styleStrike: notStriked})
+      } else {
+        this.setState({styleStrike: striked})
+      }
     }
+
 
 }
 
@@ -56,7 +84,7 @@ const styles = StyleSheet.create({
     noteText: {
         paddingLeft: 60,
         borderLeftWidth: 10,
-        borderLeftColor: '#E91E63'
+        borderLeftColor: '#E91E63',
     },
     noteDelete: {
         position: 'absolute',
