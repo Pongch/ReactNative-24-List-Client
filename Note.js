@@ -7,6 +7,8 @@ import {
     Switch,
 } from 'react-native';
 
+
+//object styles for text
 const striked = {
   paddingLeft: 60,
   borderLeftWidth: 10,
@@ -47,7 +49,7 @@ const defaultStrike = {
                   onValueChange={(val) => this.toggleSwitch(val)}
                   style={styles.checkbox}
                 />
-                <Text style={this.state.styleStrike}>{this.props.val.note}</Text>
+                <Text style={this.state.styleStrike}>{this.props.val.title}</Text>
 
                 <TouchableOpacity onPress={this.props.deleteMethod} style={styles.noteDelete}>
                     <Text style={styles.noteDeleteText}>X</Text>

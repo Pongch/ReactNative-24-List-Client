@@ -20,11 +20,35 @@ export default class List extends Component {
             noteText: '',
         };
     }
+
+    componentDidMount(){
+      return fetch('https://safe-river-44228.herokuapp.com/notes')
+      .then(response => {return response.json()})
+      .then(jsonresponse => {
+        this.setState({noteArray: jsonresponse})
+      }).catch((error)=>{
+         console.log("Api call error");
+         alert(error.message);
+      })
+    }
+
+    componentWillUpdate(){
+      return fetch('https://safe-river-44228.herokuapp.com/notes')
+      .then(response => {return response.json()})
+      .then(jsonresponse => {
+        this.setState({noteArray: jsonresponse})
+      }).catch((error)=>{
+         console.log("Api call error");
+         alert(error.message);
+      })
+    }
+
     render() {
-        let notes = this.state.noteArray.map((val, key)=>{
-            return <Note key={key} keyval={key} val={val}
-                    deleteMethod={()=>this.deleteNote(key)}/>
+        let notes = this.state.noteArray.map((object)=>{
+            return <Note key={object.id} keyval={object.id} val={object}
+                    deleteMethod={()=>this.deleteNote(object.id)}/>
         });
+
         return (
             <KeyboardAvoidingView style={styles.container}>
                 <View style={styles.header}>
@@ -34,11 +58,14 @@ export default class List extends Component {
                     <TextInput
                         style={styles.textInput}
                         placeholder='Add New Note'
-                        onChangeText={(noteText)=> this.setState({noteText})}
+                        onChangeText={(noteText)=> this.setState({noteText: noteText})}
                         value={this.state.noteText}
                         placeholderTextColor='white'
                         underlineColorAndroid='transparent'>
                     </TextInput>
+                    <Text>
+
+                    </Text>
                 </KeyboardAvoidingView>
                 <ScrollView style={styles.scrollContainer}>
                     {notes}
@@ -50,23 +77,27 @@ export default class List extends Component {
         );
     }
 
+
     addNote(){
-        if(this.state.noteText){
-            var d = new Date();
-            this.state.noteArray.push({
-                'date':d.getFullYear()+
-                "/"+(d.getMonth()+1) +
-                "/"+ d.getDate(),
-                'note': this.state.noteText
-            });
-            this.setState({ noteArray: this.state.noteArray });
-            this.setState({noteText:''});
-        }
+      if(this.state.noteText){
+        this.setState({ noteArray: this.state.noteArray });
+        this.setState({noteText:''});
+      }
+      
+        return fetch(`https://safe-river-44228.herokuapp.com/notes/`, {
+          method: 'post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: this.state.noteText
+          })
+        });
     }
 
     deleteNote(key){
-        this.state.noteArray.splice(key, 1);
-        this.setState({noteArray: this.state.noteArray});
+        return fetch(`https://safe-river-44228.herokuapp.com/notes/${key}`, {method: 'delete'});
     }
 }
 
@@ -89,7 +120,7 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         flex: 1,
-        marginBottom: 100
+        marginBottom: 10
     },
     footer: {
         bottom: 0,
